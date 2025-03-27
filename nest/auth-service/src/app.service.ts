@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import {Body, Injectable} from '@nestjs/common';
 import {SignupResponseInterfaces} from "./interfaces/signup-response.interfaces";
 import {SignupDto} from "./dto/signup.dto";
 import {AppHttpResponse} from "./_shared/utils/AppHttpResponse";
@@ -12,14 +12,17 @@ import {ConfigService} from "@nestjs/config";
 import {AppHttpException} from "./_shared/utils/AppHttpException";
 import {LoginDto} from "./dto/login.dto";
 import {LoginResponseInterfaces} from "./interfaces/login-response.interfaces";
+import {JwtPayload, SignOptions} from "jsonwebtoken";
+import {InitDto} from "./dto/init.dto";
+import {InitResponseInterfaces} from "./interfaces/init-response.interfaces";
 
 @Injectable()
 export class AppService {
   constructor(
       @InjectModel(User.name) private readonly userModel: Model<User>,
       private readonly configService: ConfigService,
-  ) {
-  }
+  ) {}
+
 
   public async signup(signupDto: SignupDto): Promise<AppHttpResponse<SignupResponseInterfaces>> {
     const checkUser  = await this.userModel.exists({
@@ -54,19 +57,48 @@ export class AppService {
     });
 
     if (user === null){
-      return new AppHttpResponse('Неправильные данные для входа: неверный адрес электронной почты или пароль.', 'Неправильные данные для входа: неверный адрес электронной почты или пароль.');
+      return new AppHttpResponse(false, 'Неправильные данные для входа: неверный адрес электронной почты или пароль.', 'Неправильные данные для входа: неверный адрес электронной почты или пароль.', {});
     }
 
     const verified: boolean = await bcrypt.compare(loginDto.password, user.password);
     if (verified === false){
-      throw new AppHttpException('Неправильные данные для входа: неверный адрес электронной почты или пароль.', 'Неправильные данные для входа: неверный адрес электронной почты или пароль.');
+      return new AppHttpResponse(false, 'Неправильные данные для входа: неверный адрес электронной почты или пароль.', 'Неправильные данные для входа: неверный адрес электронной почты или пароль.', {});
     }
 
     const jwtToken: string = this.generateJwtToken({
       _id: user._id.toString(),
-      email: user.email
+      email: user.email,
+      optionsJwt: {
+        expiresIn: 3600
+      }
     });
     return new AppHttpResponse('Ok', 'Ok', {jwt_token: jwtToken});
+  }
+
+  public async init(initDto: InitDto): Promise<AppHttpResponse<InitResponseInterfaces>> {
+    const jwtSecret: string | undefined = this.configService.get<string>('JWT_SECRET');
+
+    if (jwtSecret === undefined){
+      throw new AppHttpException('Отсутствует JWT SECRET.', 'Возникла техническая неполадка. Пожалуйста, повторите попытку. Если ошибка повторится — свяжитесь с нашей службой поддержки!')
+    }
+
+    const jwtPayload: string | JwtPayload = jwt.verify(initDto.jwt, jwtSecret);
+    console.log(jwtPayload?.['_id'])
+    const user = await this.userModel.findById(jwtPayload?.['_id']).select(['_id', 'email']).exec() as {_id: string, email: string} | null;
+    console.log(user)
+
+    // const user = await this.userModel.findOne({
+    //   select: ['_id', 'email'],
+    //   where: {
+    //     _id: jwtPayload?.['_id']
+    //   }
+    // }) as InitResponseInterfaces;
+
+    if (user === null){
+      throw new AppHttpException('Пользователь не найден.', 'Пользователь не найден.');
+    }
+
+    return new AppHttpResponse('Ok', 'Ok', {user});
   }
 
   public generateJwtToken(generateJwtTokenDto: GenerateJwtTokenDto): string {
@@ -79,6 +111,6 @@ export class AppService {
     return jwt.sign({
       _id: generateJwtTokenDto._id,
       email: generateJwtTokenDto.email,
-    }, jwtSecret);
+    }, jwtSecret, generateJwtTokenDto.optionsJwt);
   }
 }

@@ -5,9 +5,9 @@ export class AppHttpResponse<T> {
   public readonly data: T = {} as T;
 
   constructor(message: string);
-  constructor(message: string, data: object);
+  constructor(message: string, data: T);
   constructor(message: string, user_message: string);
-  constructor(message: string, user_message: string, data: object);
+  constructor(message: string, user_message: string, data: T);
   constructor(status: boolean, message: string);
   constructor(status: boolean, message: string, data: T);
   constructor(status: boolean, message: string, user_message: string);

@@ -1,4 +1,5 @@
-import {IsEmail, IsNotEmpty, IsString} from "class-validator";
+import {IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString} from "class-validator";
+import {SignOptions} from "jsonwebtoken";
 
 export class GenerateJwtTokenDto {
     @IsNotEmpty()
@@ -8,4 +9,9 @@ export class GenerateJwtTokenDto {
     @IsNotEmpty()
     @IsString()
     email: string;
+
+    @IsNotEmpty()
+    @IsNumber()
+    @IsOptional()
+    optionsJwt?: SignOptions;
 }
