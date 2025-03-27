@@ -1,11 +1,11 @@
 import {IsEmail, IsNotEmpty, IsString} from "class-validator";
 
-export class SignupDto {
+export class GenerateJwtTokenDto {
     @IsNotEmpty()
-    @IsEmail()
-    email: string;
+    @IsString()
+    _id: string;
 
     @IsNotEmpty()
     @IsString()
-    password: string;
+    email: string;
 }
