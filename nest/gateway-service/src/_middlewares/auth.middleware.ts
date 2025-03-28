@@ -1,37 +1,35 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
-import { Request, Response, NextFunction } from 'express';
+import {HttpStatus, Injectable, NestMiddleware} from '@nestjs/common';
+import {NextFunction, Request, Response} from 'express';
 import {AuthServiceApiService} from "../_integrations/auth-service-api/auth-service-api.service";
+import {AppHttpException} from "../_shared/utils/AppHttpException";
+import {AppHttpResponse} from "../_shared/utils/AppHttpResponse";
+import {InitInterfaces} from "../_integrations/auth-service-api/interfaces/init.interfaces";
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
     constructor(private readonly authServiceApiService: AuthServiceApiService) {}
 
     async use(req: Request, res: Response, next: NextFunction) {
-        // Получаем токен из заголовков запроса
+        const defaultErrorText = 'Возникла техническая неполадка. Пожалуйста, повторите попытку. Если ошибка повторится — свяжитесь с нашей службой поддержки!';
+
         const token = req.headers['authorization']?.split(' ')[1];
 
         if (!token) {
-            return res.status(401).send({ message: 'No token provided' });
+            throw new AppHttpException('No token provided', defaultErrorText, HttpStatus.UNAUTHORIZED);
         }
 
         try {
-            // Отправляем запрос в микросервис Auth для проверки токена
-            const responseClientInfo = await this.authServiceApiService.init({jwt: token});
-            if (responseClientInfo.status === false){
-                return res.status(401).send({ message: 'No token provided' });
-            }
-            console.log(responseClientInfo.data.user)
-            // if (!clientInfo.user) {
-            //     return res.status(401).send({ message: 'Invalid token' });
-            // }
+            const responseClientInfo: AppHttpResponse<InitInterfaces> = await this.authServiceApiService.init({jwt: token});
 
-            // Добавляем информацию о клиенте в запрос
+            if (responseClientInfo.status === false){
+                throw new AppHttpException('No token provided', defaultErrorText, HttpStatus.UNAUTHORIZED);
+            }
+
             req['user'] = JSON.stringify(responseClientInfo.data.user);
 
-            // Продолжаем обработку запроса
             next();
         } catch (error) {
-            return res.status(500).send({ message: 'Error validating token', error });
+            throw new AppHttpException('Error validating token', defaultErrorText, HttpStatus.UNAUTHORIZED);
         }
     }
 }

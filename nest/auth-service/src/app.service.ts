@@ -82,17 +82,15 @@ export class AppService {
       throw new AppHttpException('Отсутствует JWT SECRET.', 'Возникла техническая неполадка. Пожалуйста, повторите попытку. Если ошибка повторится — свяжитесь с нашей службой поддержки!')
     }
 
-    const jwtPayload: string | JwtPayload = jwt.verify(initDto.jwt, jwtSecret);
-    console.log(jwtPayload?.['_id'])
-    const user = await this.userModel.findById(jwtPayload?.['_id']).select(['_id', 'email']).exec() as {_id: string, email: string} | null;
-    console.log(user)
+    let jwtPayload: string | JwtPayload;
 
-    // const user = await this.userModel.findOne({
-    //   select: ['_id', 'email'],
-    //   where: {
-    //     _id: jwtPayload?.['_id']
-    //   }
-    // }) as InitResponseInterfaces;
+    try {
+      jwtPayload = jwt.verify(initDto.jwt, jwtSecret);
+    }catch (e) {
+      throw new AppHttpException('JWT токен не прошел валидацию.', 'Возникла техническая неполадка. Пожалуйста, повторите попытку. Если ошибка повторится — свяжитесь с нашей службой поддержки!')
+    }
+
+    const user = await this.userModel.findById(jwtPayload?.['_id']).select(['_id', 'email']).exec() as {_id: string, email: string} | null;
 
     if (user === null){
       throw new AppHttpException('Пользователь не найден.', 'Пользователь не найден.');
