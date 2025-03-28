@@ -8,10 +8,16 @@ import AuthLoginDto from "./dto/auth/auth-login.dto";
 import {AuthLoginResponseInterface} from "./interfaces/auth/auth-login-response.interface";
 import AuthInitDto from "./dto/auth/auth-init.dto";
 import {AuthInitResponseInterface} from "./interfaces/auth/auth-init-response.interface";
+import ProductSyncMockupDto from "./dto/product/product-sync-mockup.dto";
+import {ProductSyncMockupResponseInterface} from "./interfaces/product/product-sync-mockup-response.interface";
+import ProductGetProductsDto from "./dto/product/product-get-products.dto";
+import {ProductGetProductsResponseInterface} from "./interfaces/product/product-get-products-response.interface";
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(
+      private readonly appService: AppService,
+  ) {}
 
   @Post('/auth/signup')
   public async authSignup(@Body() authSignupDto: AuthSignupDto): Promise<AppHttpResponse<AuthSignupResponseInterface>> {
@@ -26,5 +32,16 @@ export class AppController {
   @Get('/auth/init')
   public async authInit(@Req() request: Request): Promise<AppHttpResponse<AuthInitResponseInterface>>{
     return new AppHttpResponse('Ok', 'Ok', {user: JSON.parse(request['user'])});
+  }
+
+  @Post('/product/sync-mockup')
+  public async productSyncMockup(@Body() productSyncMockupDto: ProductSyncMockupDto): Promise<AppHttpResponse<ProductSyncMockupResponseInterface>> {
+    return await this.appService.productSyncMockup(productSyncMockupDto);
+  }
+
+
+  @Get('/product/get-products')
+  public async productGetProducts(@Query() productGetProductsDto: ProductGetProductsDto): Promise<AppHttpResponse<ProductGetProductsResponseInterface>> {
+    return await this.appService.productGetProducts(productGetProductsDto);
   }
 }

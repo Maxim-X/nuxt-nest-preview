@@ -4,11 +4,13 @@ import { AppService } from './app.service';
 import { AuthServiceApiModule } from './_integrations/auth-service-api/auth-service-api.module';
 import {ConfigModule} from "@nestjs/config";
 import {AuthMiddleware} from "./_middlewares/auth.middleware";
+import { ProductServiceApiModule } from './_integrations/product-service-api/product-service-api.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    AuthServiceApiModule
+    AuthServiceApiModule,
+    ProductServiceApiModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,4 +1,4 @@
-import {Injectable, Query} from '@nestjs/common';
+import {Body, Injectable, Query} from '@nestjs/common';
 import {AuthSignupResponseInterface} from "./interfaces/auth/auth-signup-response.interface";
 import AuthSignupDto from "./dto/auth/auth-signup.dto";
 import {AuthServiceApiService} from "./_integrations/auth-service-api/auth-service-api.service";
@@ -10,11 +10,18 @@ import {ResponseInterfaces} from "./_integrations/auth-service-api/interfaces/re
 import AuthLoginDto from "./dto/auth/auth-login.dto";
 import {LoginInterfaces} from "./_integrations/auth-service-api/interfaces/login.interfaces";
 import AuthInitDto from "./dto/auth/auth-init.dto";
+import ProductSyncMockupDto from "./dto/product/product-sync-mockup.dto";
+import {ProductServiceApiService} from "./_integrations/product-service-api/product-service-api.service";
+import {AuthInitResponseInterface} from "./interfaces/auth/auth-init-response.interface";
+import {ProductSyncMockupResponseInterface} from "./interfaces/product/product-sync-mockup-response.interface";
+import ProductGetProductsDto from "./dto/product/product-get-products.dto";
+import {ProductGetProductsResponseInterface} from "./interfaces/product/product-get-products-response.interface";
 
 @Injectable()
 export class AppService {
   constructor(
-    private readonly authServiceApiService: AuthServiceApiService,
+      private readonly authServiceApiService: AuthServiceApiService,
+      private readonly productServiceApiService: ProductServiceApiService,
   ) {}
 
   public async authSignup(authSignupDto: AuthSignupDto): Promise<AppHttpResponse<SignupInterfaces>> {
@@ -23,5 +30,13 @@ export class AppService {
 
   public async authLogin(authLoginDto: AuthLoginDto): Promise<AppHttpResponse<LoginInterfaces>> {
     return await this.authServiceApiService.login(authLoginDto);
+  }
+
+  public async productSyncMockup(productSyncMockupDto: ProductSyncMockupDto): Promise<AppHttpResponse<ProductSyncMockupResponseInterface>> {
+    return await this.productServiceApiService.syncMockup(productSyncMockupDto);
+  }
+
+  public async productGetProducts(productGetProductsDto: ProductGetProductsDto): Promise<AppHttpResponse<ProductGetProductsResponseInterface>> {
+    return await this.productServiceApiService.getProducts(productGetProductsDto);
   }
 }
