@@ -7,6 +7,8 @@ import GetProductsDto from "./dto/get-products.dto";
 import {GetProductsResponseInterface} from "./interfaces/get-products-response.interface";
 import GetProductDto from "./dto/get-product.dto";
 import {GetProductResponseInterface} from "./interfaces/get-product-response.interface";
+import EditProductDto from "./dto/edit-product.dto";
+import {EditProductResponseInterface} from "./interfaces/edit-product-response.interface";
 
 @Controller('/api')
 export class AppController {
@@ -25,5 +27,10 @@ export class AppController {
   @Get('/get-product')
   private async getProduct(@Query() getProductDto: GetProductDto): Promise<AppHttpResponse<GetProductResponseInterface>> {
     return await this.appService.getProduct(getProductDto);
+  }
+
+  @Post('/edit-product')
+  private async editProduct(@Body() editProductDto: EditProductDto): Promise<AppHttpResponse<EditProductResponseInterface>> {
+    return await this.appService.editProduct(editProductDto);
   }
 }

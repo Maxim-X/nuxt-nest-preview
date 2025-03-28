@@ -18,6 +18,8 @@ import ProductGetProductsDto from "./dto/product/product-get-products.dto";
 import {ProductGetProductsResponseInterface} from "./interfaces/product/product-get-products-response.interface";
 import ProductGetProductDto from "./dto/product/product-get-product.dto";
 import {ProductGetProductResponseInterface} from "./interfaces/product/product-get-product-response.interface";
+import ProductEditProductDto from "./dto/product/product-edit-product.dto";
+import {ProductEditProductResponseInterface} from "./interfaces/product/product-edit-product-response.interface";
 
 @Injectable()
 export class AppService {
@@ -44,5 +46,9 @@ export class AppService {
 
   public async productGetProduct(productGetProductDto: ProductGetProductDto): Promise<AppHttpResponse<ProductGetProductResponseInterface>> {
     return await this.productServiceApiService.getProduct(productGetProductDto);
+  }
+
+  public async productEditProduct(productEditProductDto: ProductEditProductDto): Promise<AppHttpResponse<ProductEditProductResponseInterface>> {
+    return await this.productServiceApiService.editProduct(productEditProductDto);
   }
 }

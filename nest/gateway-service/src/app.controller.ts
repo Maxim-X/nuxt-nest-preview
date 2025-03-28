@@ -14,6 +14,8 @@ import ProductGetProductsDto from "./dto/product/product-get-products.dto";
 import {ProductGetProductsResponseInterface} from "./interfaces/product/product-get-products-response.interface";
 import ProductGetProductDto from "./dto/product/product-get-product.dto";
 import {ProductGetProductResponseInterface} from "./interfaces/product/product-get-product-response.interface";
+import ProductEditProductDto from "./dto/product/product-edit-product.dto";
+import {ProductEditProductResponseInterface} from "./interfaces/product/product-edit-product-response.interface";
 
 @Controller()
 export class AppController {
@@ -49,5 +51,10 @@ export class AppController {
   @Get('/product/get-product')
   public async productGetProduct(@Query() productGetProductDto: ProductGetProductDto): Promise<AppHttpResponse<ProductGetProductResponseInterface>> {
     return await this.appService.productGetProduct(productGetProductDto);
+  }
+
+  @Post('/product/edit-product')
+  public async productEditProduct(@Body() productEditProductDto: ProductEditProductDto): Promise<AppHttpResponse<ProductEditProductResponseInterface>> {
+    return await this.appService.productEditProduct(productEditProductDto);
   }
 }

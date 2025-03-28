@@ -5,11 +5,13 @@ import {SyncMockupResponseInterface} from "./interfaces/sync-mockup-response.int
 import {PRODUCTS_MOCKUP_CONSTANT} from "../_shared/constants/products-mockup.constant";
 import {Product} from "../_database/schemas/product.schema";
 import {InjectModel} from "@nestjs/mongoose";
-import {Model, model, Document, Schema, HydratedDocument, Types, Query, ObjectId} from "mongoose";
+import {Model, model, Document, Schema, HydratedDocument, Types, Query, ObjectId, UpdateWriteOpResult} from "mongoose";
 import GetProductsDto from "./dto/get-products.dto";
 import {GetProductsResponseInterface} from "./interfaces/get-products-response.interface";
 import GetProductDto from "./dto/get-product.dto";
 import {GetProductResponseInterface} from "./interfaces/get-product-response.interface";
+import EditProductDto from "./dto/edit-product.dto";
+import {EditProductResponseInterface} from "./interfaces/edit-product-response.interface";
 
 @Injectable()
 export class AppService {
@@ -47,8 +49,18 @@ export class AppService {
 
     return new AppHttpResponse('Ok', 'Ok', {products: products, total: totalProducts});
   }
+
   public async getProduct(getProductDto: GetProductDto): Promise<AppHttpResponse<GetProductResponseInterface>> {
     const product: (Document<unknown, {}, Product> & Product & {_id: Types.ObjectId } & {__v: number }) | null = await this.productModel.findById(getProductDto.id);
     return new AppHttpResponse('Ok', 'Ok', {product: product});
+  }
+
+  public async editProduct(editProductDto: EditProductDto): Promise<AppHttpResponse<EditProductResponseInterface>> {
+    const update: Omit<EditProductDto, 'id'> = Object.fromEntries(
+        Object.entries(editProductDto).filter(([key]) => key !== 'id')
+    ) as Omit<EditProductDto, 'id'>;
+
+    await this.productModel.updateOne({_id: editProductDto.id}, update);
+    return new AppHttpResponse('Ok', 'Ok', {});
   }
 }

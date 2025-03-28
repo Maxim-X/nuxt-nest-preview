@@ -10,6 +10,8 @@ import GetProductsDto from "./dto/get-products.dto";
 import {GetProductsResponseInterfaces} from "./interfaces/get-products-response.interfaces";
 import GetProductDto from "./dto/get-product.dto";
 import {GetProductResponseInterfaces} from "./interfaces/get-product-response.interfaces";
+import EditProductDto from "./dto/edit-product.dto";
+import {EditProductResponseInterfaces} from "./interfaces/edit-product-response.interfaces";
 
 @Injectable()
 export class ProductServiceApiService {
@@ -44,6 +46,14 @@ export class ProductServiceApiService {
             url: '/api/get-product',
             params: getProductDto,
         }) as AppHttpResponse<GetProductResponseInterfaces>;
+    }
+
+    public async editProduct(editProductDto: EditProductDto): Promise<AppHttpResponse<EditProductResponseInterfaces>> {
+        return await this.request<EditProductResponseInterfaces>({
+            method: 'POST',
+            url: '/api/edit-product',
+            data: editProductDto,
+        }) as AppHttpResponse<EditProductResponseInterfaces>;
     }
 
     public async request<T>(requestDto: RequestDto): Promise<AppHttpResponse<T>>{
