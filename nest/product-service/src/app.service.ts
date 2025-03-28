@@ -8,6 +8,8 @@ import {InjectModel} from "@nestjs/mongoose";
 import {Model, model, Document, Schema, HydratedDocument, Types, Query, ObjectId} from "mongoose";
 import GetProductsDto from "./dto/get-products.dto";
 import {GetProductsResponseInterface} from "./interfaces/get-products-response.interface";
+import GetProductDto from "./dto/get-product.dto";
+import {GetProductResponseInterface} from "./interfaces/get-product-response.interface";
 
 @Injectable()
 export class AppService {
@@ -38,11 +40,15 @@ export class AppService {
 
   public async getProducts(getProductsDto: GetProductsDto): Promise<AppHttpResponse<GetProductsResponseInterface>> {
     const totalProducts = await this.productModel.countDocuments();
-    let products: (Document<unknown, {}, Product> & Product & {_id: ObjectId; } & {__v: number; })[] = await this.productModel.find({}, {}, {
+    const products: (Document<unknown, {}, Product> & Product & {_id: ObjectId; } & {__v: number; })[] = await this.productModel.find({}, {}, {
       skip: (getProductsDto.page - 1) * getProductsDto.take,
       limit: getProductsDto.take
     });
 
     return new AppHttpResponse('Ok', 'Ok', {products: products, total: totalProducts});
+  }
+  public async getProduct(getProductDto: GetProductDto): Promise<AppHttpResponse<GetProductResponseInterface>> {
+    const product: (Document<unknown, {}, Product> & Product & {_id: Types.ObjectId } & {__v: number }) | null = await this.productModel.findById(getProductDto.id);
+    return new AppHttpResponse('Ok', 'Ok', {product: product});
   }
 }

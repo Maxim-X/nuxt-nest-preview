@@ -12,6 +12,8 @@ import ProductSyncMockupDto from "./dto/product/product-sync-mockup.dto";
 import {ProductSyncMockupResponseInterface} from "./interfaces/product/product-sync-mockup-response.interface";
 import ProductGetProductsDto from "./dto/product/product-get-products.dto";
 import {ProductGetProductsResponseInterface} from "./interfaces/product/product-get-products-response.interface";
+import ProductGetProductDto from "./dto/product/product-get-product.dto";
+import {ProductGetProductResponseInterface} from "./interfaces/product/product-get-product-response.interface";
 
 @Controller()
 export class AppController {
@@ -39,9 +41,13 @@ export class AppController {
     return await this.appService.productSyncMockup(productSyncMockupDto);
   }
 
-
   @Get('/product/get-products')
   public async productGetProducts(@Query() productGetProductsDto: ProductGetProductsDto): Promise<AppHttpResponse<ProductGetProductsResponseInterface>> {
     return await this.appService.productGetProducts(productGetProductsDto);
+  }
+
+  @Get('/product/get-product')
+  public async productGetProduct(@Query() productGetProductDto: ProductGetProductDto): Promise<AppHttpResponse<ProductGetProductResponseInterface>> {
+    return await this.appService.productGetProduct(productGetProductDto);
   }
 }

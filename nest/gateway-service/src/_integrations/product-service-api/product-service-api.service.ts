@@ -8,6 +8,8 @@ import {SyncMockupResponseInterfaces} from "./interfaces/sync-mockup-response.in
 import {RequestDto} from "./dto/request.dto";
 import GetProductsDto from "./dto/get-products.dto";
 import {GetProductsResponseInterfaces} from "./interfaces/get-products-response.interfaces";
+import GetProductDto from "./dto/get-product.dto";
+import {GetProductResponseInterfaces} from "./interfaces/get-product-response.interfaces";
 
 @Injectable()
 export class ProductServiceApiService {
@@ -34,6 +36,14 @@ export class ProductServiceApiService {
             url: '/api/get-products',
             params: getProductsDto,
         }) as AppHttpResponse<GetProductsResponseInterfaces>;
+    }
+
+    public async getProduct(getProductDto: GetProductDto): Promise<AppHttpResponse<GetProductResponseInterfaces>> {
+        return await this.request<GetProductResponseInterfaces>({
+            method: 'GET',
+            url: '/api/get-product',
+            params: getProductDto,
+        }) as AppHttpResponse<GetProductResponseInterfaces>;
     }
 
     public async request<T>(requestDto: RequestDto): Promise<AppHttpResponse<T>>{

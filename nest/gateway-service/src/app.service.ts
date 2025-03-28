@@ -16,6 +16,8 @@ import {AuthInitResponseInterface} from "./interfaces/auth/auth-init-response.in
 import {ProductSyncMockupResponseInterface} from "./interfaces/product/product-sync-mockup-response.interface";
 import ProductGetProductsDto from "./dto/product/product-get-products.dto";
 import {ProductGetProductsResponseInterface} from "./interfaces/product/product-get-products-response.interface";
+import ProductGetProductDto from "./dto/product/product-get-product.dto";
+import {ProductGetProductResponseInterface} from "./interfaces/product/product-get-product-response.interface";
 
 @Injectable()
 export class AppService {
@@ -38,5 +40,9 @@ export class AppService {
 
   public async productGetProducts(productGetProductsDto: ProductGetProductsDto): Promise<AppHttpResponse<ProductGetProductsResponseInterface>> {
     return await this.productServiceApiService.getProducts(productGetProductsDto);
+  }
+
+  public async productGetProduct(productGetProductDto: ProductGetProductDto): Promise<AppHttpResponse<ProductGetProductResponseInterface>> {
+    return await this.productServiceApiService.getProduct(productGetProductDto);
   }
 }
