@@ -1,7 +1,7 @@
 import {
-    EditProductResponseInterfaces
-} from "../../_integrations/product-service-api/interfaces/edit-product-response.interfaces";
+    EditProductResponseInterface
+} from "../../_integrations/product-service-api/interfaces/edit-product-response.interface";
 
-export class ProductEditProductResponseInterface extends EditProductResponseInterfaces {
+export class ProductEditProductResponseInterface extends EditProductResponseInterface {
 
 }

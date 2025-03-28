@@ -1,5 +1,5 @@
 import {Body, Injectable} from '@nestjs/common';
-import {SignupResponseInterfaces} from "./interfaces/signup-response.interfaces";
+import {SignupResponseInterface} from "./interfaces/signup-response.interface";
 import {SignupDto} from "./dto/signup.dto";
 import {AppHttpResponse} from "./_shared/utils/AppHttpResponse";
 import {InjectModel} from "@nestjs/mongoose";
@@ -11,10 +11,10 @@ import {GenerateJwtTokenDto} from "./dto/generate-jwt-token.dto";
 import {ConfigService} from "@nestjs/config";
 import {AppHttpException} from "./_shared/utils/AppHttpException";
 import {LoginDto} from "./dto/login.dto";
-import {LoginResponseInterfaces} from "./interfaces/login-response.interfaces";
+import {LoginResponseInterface} from "./interfaces/login-response.interface";
 import {JwtPayload, SignOptions} from "jsonwebtoken";
 import {InitDto} from "./dto/init.dto";
-import {InitResponseInterfaces} from "./interfaces/init-response.interfaces";
+import {InitResponseInterface} from "./interfaces/init-response.interface";
 
 @Injectable()
 export class AppService {
@@ -24,7 +24,7 @@ export class AppService {
   ) {}
 
 
-  public async signup(signupDto: SignupDto): Promise<AppHttpResponse<SignupResponseInterfaces>> {
+  public async signup(signupDto: SignupDto): Promise<AppHttpResponse<SignupResponseInterface>> {
     const checkUser  = await this.userModel.exists({
       email: signupDto.email
     });
@@ -51,7 +51,7 @@ export class AppService {
     return new AppHttpResponse('Ok', 'Ok', {jwt_token: jwtToken});
   }
 
-  public async login(loginDto: LoginDto): Promise<AppHttpResponse<LoginResponseInterfaces>> {
+  public async login(loginDto: LoginDto): Promise<AppHttpResponse<LoginResponseInterface>> {
     const user = await this.userModel.findOne({
       email: loginDto.email
     });
@@ -75,7 +75,7 @@ export class AppService {
     return new AppHttpResponse('Ok', 'Ok', {jwt_token: jwtToken});
   }
 
-  public async init(initDto: InitDto): Promise<AppHttpResponse<InitResponseInterfaces>> {
+  public async init(initDto: InitDto): Promise<AppHttpResponse<InitResponseInterface>> {
     const jwtSecret: string | undefined = this.configService.get<string>('JWT_SECRET');
 
     if (jwtSecret === undefined){

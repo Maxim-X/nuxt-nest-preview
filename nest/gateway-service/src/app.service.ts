@@ -6,9 +6,9 @@ import {raw} from "express";
 import {AppHttpException} from "./_shared/utils/AppHttpException";
 import {AppHttpResponse} from "./_shared/utils/AppHttpResponse";
 import {SignupInterfaces} from "./_integrations/auth-service-api/interfaces/signup.interfaces";
-import {ResponseInterfaces} from "./_integrations/auth-service-api/interfaces/response.interfaces";
+import {ResponseInterface} from "./_integrations/auth-service-api/interfaces/response.interface";
 import AuthLoginDto from "./dto/auth/auth-login.dto";
-import {LoginInterfaces} from "./_integrations/auth-service-api/interfaces/login.interfaces";
+import {LoginInterface} from "./_integrations/auth-service-api/interfaces/login.interface";
 import AuthInitDto from "./dto/auth/auth-init.dto";
 import ProductSyncMockupDto from "./dto/product/product-sync-mockup.dto";
 import {ProductServiceApiService} from "./_integrations/product-service-api/product-service-api.service";
@@ -32,7 +32,7 @@ export class AppService {
     return await this.authServiceApiService.signup(authSignupDto);
   }
 
-  public async authLogin(authLoginDto: AuthLoginDto): Promise<AppHttpResponse<LoginInterfaces>> {
+  public async authLogin(authLoginDto: AuthLoginDto): Promise<AppHttpResponse<LoginInterface>> {
     return await this.authServiceApiService.login(authLoginDto);
   }
 

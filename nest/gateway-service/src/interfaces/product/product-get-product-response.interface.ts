@@ -1,10 +1,10 @@
 import {
-    GetProductsResponseInterfaces
-} from "../../_integrations/product-service-api/interfaces/get-products-response.interfaces";
+    GetProductsResponseInterface
+} from "../../_integrations/product-service-api/interfaces/get-products-response.interface";
 import {
-    GetProductResponseInterfaces
-} from "../../_integrations/product-service-api/interfaces/get-product-response.interfaces";
+    GetProductResponseInterface
+} from "../../_integrations/product-service-api/interfaces/get-product-response.interface";
 
-export class ProductGetProductResponseInterface extends GetProductResponseInterfaces{
+export class ProductGetProductResponseInterface extends GetProductResponseInterface{
 
 }

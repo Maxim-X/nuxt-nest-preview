@@ -3,7 +3,7 @@ import {NextFunction, Request, Response} from 'express';
 import {AuthServiceApiService} from "../_integrations/auth-service-api/auth-service-api.service";
 import {AppHttpException} from "../_shared/utils/AppHttpException";
 import {AppHttpResponse} from "../_shared/utils/AppHttpResponse";
-import {InitInterfaces} from "../_integrations/auth-service-api/interfaces/init.interfaces";
+import {InitInterface} from "../_integrations/auth-service-api/interfaces/init.interface";
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
@@ -19,7 +19,7 @@ export class AuthMiddleware implements NestMiddleware {
         }
 
         try {
-            const responseClientInfo: AppHttpResponse<InitInterfaces> = await this.authServiceApiService.init({jwt: token});
+            const responseClientInfo: AppHttpResponse<InitInterface> = await this.authServiceApiService.init({jwt: token});
 
             if (responseClientInfo.status === false){
                 throw new AppHttpException('No token provided', defaultErrorText, HttpStatus.UNAUTHORIZED);

@@ -4,12 +4,12 @@ import {HttpService} from "@nestjs/axios";
 import { ConfigService } from '@nestjs/config';
 import {AppHttpException} from "../../_shared/utils/AppHttpException";
 import {SignupDto} from "./dto/signup.dto";
-import {ResponseInterfaces} from "./interfaces/response.interfaces";
+import {ResponseInterface} from "./interfaces/response.interface";
 import {SignupInterfaces} from "./interfaces/signup.interfaces";
 import {AppHttpResponse} from "../../_shared/utils/AppHttpResponse";
 import {LoginDto} from "./dto/login.dto";
-import {LoginInterfaces} from "./interfaces/login.interfaces";
-import {InitInterfaces} from "./interfaces/init.interfaces";
+import {LoginInterface} from "./interfaces/login.interface";
+import {InitInterface} from "./interfaces/init.interface";
 import InitDto from "./dto/init.dto";
 
 @Injectable()
@@ -32,20 +32,20 @@ export class AuthServiceApiService {
         }) as AppHttpResponse<SignupInterfaces>;
     }
 
-    public async login(loginDto: LoginDto): Promise<AppHttpResponse<LoginInterfaces>> {
-        return await this.request<LoginInterfaces>({
+    public async login(loginDto: LoginDto): Promise<AppHttpResponse<LoginInterface>> {
+        return await this.request<LoginInterface>({
             method: 'POST',
             url: '/api/auth/login',
             data: loginDto,
-        }) as AppHttpResponse<LoginInterfaces>;
+        }) as AppHttpResponse<LoginInterface>;
     }
 
-    public async init(initDto: InitDto): Promise<AppHttpResponse<InitInterfaces>> {
-        return await this.request<InitInterfaces>({
+    public async init(initDto: InitDto): Promise<AppHttpResponse<InitInterface>> {
+        return await this.request<InitInterface>({
             method: 'GET',
             url: '/api/auth/init',
             params: initDto,
-        }) as AppHttpResponse<InitInterfaces>;
+        }) as AppHttpResponse<InitInterface>;
     }
 
     public async request<T>(requestDto: RequestDto): Promise<AppHttpResponse<T>>{

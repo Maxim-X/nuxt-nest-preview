@@ -1,5 +1,5 @@
-import {LoginInterfaces} from "../../_integrations/auth-service-api/interfaces/login.interfaces";
+import {LoginInterface} from "../../_integrations/auth-service-api/interfaces/login.interface";
 
-export interface AuthLoginResponseInterface extends LoginInterfaces{
+export interface AuthLoginResponseInterface extends LoginInterface{
 
 }
